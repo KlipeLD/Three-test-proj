@@ -22,11 +22,6 @@ print_r($needle);
 echo "<br>Answer: ";
 print_r($answerB);
 
-
-
-
-
-
 //task1-a
 function getNearbyItemA($arr, $needle){
 	asort($arr);
