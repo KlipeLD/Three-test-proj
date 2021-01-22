@@ -1,73 +1,92 @@
 <?php
 //task1-a
-$haystack = [-1,-6,-99,999,-567,7654, 569];
-$needle = -555;
+$haystack = [];
+for ($i=0;$i<1000000;$i++)
+{
+	array_push($haystack,rand());
+}
+$needle = rand();
+
+$time_start = microtime(true);
+
 $answerA  = getNearbyItemA($haystack,$needle);
 
-print_r($haystack);
-echo "<br>";
+$time_end = microtime(true);
+$timeDif = $time_end - $time_start;
+
+//print_r($haystack);
+echo "<br>Needle: ";
 print_r($needle);
 echo "<br>Answer: ";
 print_r($answerA);
+echo "<br>";
+echo "time = ".$timeDif." ms";
 echo "<hr>";
 
-//task1-b
-$haystack = [-999,-666,-99,999,1000,7654, 9569];
-$needle = -555;
-$answerB  = getNearbyItemB($haystack,$needle);
 
-print_r($haystack);
-echo "<br>";
+//task1-b
+$haystack = [2];
+for ($i=1;$i<1000000;$i++)
+{
+	$newEl = $haystack[$i-1]+rand(1,3);
+	array_push($haystack,$newEl);
+}
+$needle = rand(0,450000);
+$time_start = microtime(true);
+$answerB  = getNearbyItemB($haystack,$needle);
+$time_end = microtime(true);
+$timeDif = $time_end - $time_start;
+
+//print_r($haystack);
+echo "<br>Needle: ";
 print_r($needle);
 echo "<br>Answer: ";
 print_r($answerB);
+echo "<br>";
+echo "time = ".$timeDif." ms";
+echo "<hr>";
+
 
 //task1-a
 function getNearbyItemA($arr, $needle){
-	asort($arr);
-	$diff = 0;
-	$answ = 0;
-	foreach ($arr as $key => $val) {
-		if($needle-$val >= 0)
-		{
-			$diff = $needle-$val;
-			$answ = $key;
-		}
-		else
-		{
-			if ($diff > ($val-$needle))
-			{
-				$diff = $val-$needle;
-				return $key;
-			}
-			else
-			{
-				return $answ;
-			}
-		}
-	}
+	$min = abs($arr[0] - $needle);
+    for ($i = 0; $i < count($arr); $i++)
+    {
+        if (abs($arr[$i] - $needle) <= $min)
+        {
+            $min = abs($arr[$i] - $needle);
+            $num = $i;
+        }
+    }
+    return $num;
 }
 //task1-b
 function getNearbyItemB($arr, $needle){
-	$diff = 0;
-	$answ = 0;
-	foreach ($arr as $key => $val) {
-		if($needle-$val >= 0)
+
+	$min = abs($arr[0] - $needle);
+    for ($i = 0; $i < count($arr); $i++)
+    {
+    	if($arr[$i] - $needle <= 0)
 		{
-			$diff = $needle-$val;
-			$answ = $key;
+			if (abs($arr[$i] - $needle) <= $min)
+	        {
+	            $min = abs($arr[$i] - $needle);
+	            $num = $i;
+	        }
 		}
 		else
 		{
-			if ($diff > ($val-$needle))
-			{
-				$diff = $val-$needle;
-				return $key;
-			}
+			if (abs($arr[$i] - $needle) <= $min)
+	        {
+	            $min = abs($arr[$i] - $needle);
+	            $num = $i;
+	            return $num;
+	        }
 			else
 			{
-				return $answ;
+				return $num;
 			}
 		}
-	}
+    }
+    return $num;
 }
